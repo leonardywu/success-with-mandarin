@@ -1,7 +1,9 @@
 # Success with Mandarin
 
 Static website for Success with Mandarin, part of Kemix Academy. Run `node server.cjs`, then visit http://127.0.0.1:4178.
-The GitHub repository stores the website source and assets. Public website deployment is a separate step; the current preview runs locally.
+Public website: https://leonardywu.github.io/success-with-mandarin/
+
+GitHub Pages publishes the `dist` directory automatically when changes are pushed to `main`. The repository is public. Local preview remains available through `node server.cjs`.
 
 ## Editing
 - `dist/app.js`: course descriptions, sample base rates, bundle discounts, WhatsApp number, vocabulary quiz.
