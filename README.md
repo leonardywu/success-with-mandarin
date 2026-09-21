@@ -6,15 +6,17 @@ Public website: https://leonardywu.github.io/success-with-mandarin/
 GitHub Pages publishes the `dist` directory automatically when changes are pushed to `main`. The repository is public. Local preview remains available through `node server.cjs`.
 
 ## Editing
-- `dist/app.js`: course descriptions, sample base rates, bundle discounts, WhatsApp number, vocabulary quiz.
+- `dist/app.js`: per-person package prices, teaching hours, schedule options, WhatsApp number, vocabulary quiz.
 - `dist/index.html`: page content, schedule, FAQ, social links.
 - `dist/styles.css`: visual styles and responsive layout.
 - `dist/assets`: supplied brand logos.
 
 ## Items to confirm before launch
-- All prices are placeholders. Suggested 12-session discount: 10%; 24-session discount: 20%.
-- Base per-session examples: HSK 1 100,000; HSK 2 110,000; HSK 3 120,000; HSK 4 140,000; HSK 5 160,000; TOCFL 140,000 IDR.
-- Session duration, group/private format, maximum class size, platform, timezone, exact schedules, and bundle validity.
+- HSK prices updated from the owner's table on September 21, 2026. The unlabeled upper table is interpreted as Private 1-on-1; the lower table is Private Group for 2–4 people. All prices are per person.
+- HSK 1: 36 hours, private 3,450,000 / group 1,925,000 IDR. HSK 2: 36 hours, private 4,025,000 / group 2,212,500. HSK 3: 48 hours, private 6,131,800 / group 3,265,900.
+- HSK 4A and 4B: 24 hours each, private 3,450,000 / group 1,925,000 per part. HSK 5A and 5B: 48 hours each, private 7,665,900 / group 4,032,950 per part.
+- Two weekly sessions of 1.5 hours or three weekly sessions of 1 hour; both total 3 hours/week. Estimated weeks exclude holidays/rescheduling. No unconfirmed bundle discounts are applied.
+- TOCFL price and hours, platform, timezone, exact schedules, and package validity remain to be confirmed.
 - Tutor profile and verified qualifications; no fabricated credentials or testimonials are displayed.
 - Certificate issuer/requirements, payment, rescheduling and cancellation rules.
 - Quiz is casual beginner vocabulary practice, not a formal HSK level assessment. Tutor review recommended before launch.

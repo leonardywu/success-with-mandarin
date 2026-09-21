@@ -1,21 +1,43 @@
-// All rates are editable preview placeholders, not confirmed course prices.
-const SITE = { phone: '6281361265888', placeholderPricing: true };
+// Confirmed package prices in IDR per person; hours are total teaching hours.
+const SITE = { phone: '6281361265888' };
 const courses = [
- {id:'hsk1',name:'HSK 1',label:'MULAI DARI DASAR',title:'Langkah pertama, percaya diri pertama.',description:'Kenalan dengan bunyi, pinyin, dan kosakata dasar Mandarin. Cocok untuk memulai dari nol.',rate:100000},
- {id:'hsk2',name:'HSK 2',label:'LANJUTKAN FONDASIMU',title:'Lebih banyak kata, lebih banyak cerita.',description:'Lanjutkan fondasi Mandarin dengan materi dan latihan sesuai kurikulum HSK 2.',rate:110000},
- {id:'hsk3',name:'HSK 3',label:'BANGUN KEBIASAAN',title:'Saatnya melangkah lebih jauh.',description:'Kembangkan pemahaman dan keterampilan berbahasa melalui kurikulum HSK 3.',rate:120000},
- {id:'hsk4',name:'HSK 4',label:'PERLUAS KEMAMPUAN',title:'Buka ruang untuk percakapan baru.',description:'Perdalam kosakata dan pemahaman Mandarin dengan materi sesuai kurikulum HSK 4.',rate:140000},
- {id:'hsk5',name:'HSK 5',label:'TANTANG DIRIMU',title:'Tujuan besar, langkah yang terarah.',description:'Lanjutkan pembelajaran Mandarin melalui materi dan latihan sesuai kurikulum HSK 5.',rate:160000},
- {id:'tocfl',name:'TOCFL',label:'SESUAIKAN DENGAN TUJUANMU',title:'Jalur TOCFL, mulai dari levelmu.',description:'Diskusikan level awal dan target TOCFL untuk menyusun pilihan kelas yang sesuai.',rate:140000}
+ {id:'hsk1',name:'HSK 1',hours:36,privatePrice:3450000,groupPrice:1925000,description:'Kenalan dengan bunyi, pinyin, dan kosakata dasar Mandarin. Cocok untuk memulai dari nol.'},
+ {id:'hsk2',name:'HSK 2',hours:36,privatePrice:4025000,groupPrice:2212500,description:'Lanjutkan fondasi Mandarin dengan materi dan latihan sesuai kurikulum HSK 2.'},
+ {id:'hsk3',name:'HSK 3',hours:48,privatePrice:6131800,groupPrice:3265900,description:'Kembangkan pemahaman dan keterampilan berbahasa melalui kurikulum HSK 3.'},
+ {id:'hsk4a',name:'HSK 4A',hours:24,privatePrice:3450000,groupPrice:1925000,description:'Perdalam kemampuan Mandarin melalui bagian A dari kurikulum HSK 4.'},
+ {id:'hsk4b',name:'HSK 4B',hours:24,privatePrice:3450000,groupPrice:1925000,description:'Lanjutkan pembelajaran dengan bagian B dari kurikulum HSK 4.'},
+ {id:'hsk5a',name:'HSK 5A',hours:48,privatePrice:7665900,groupPrice:4032950,description:'Kembangkan kemampuan Mandarin tingkat lanjut melalui bagian A dari kurikulum HSK 5.'},
+ {id:'hsk5b',name:'HSK 5B',hours:48,privatePrice:7665900,groupPrice:4032950,description:'Lanjutkan materi Mandarin tingkat lanjut melalui bagian B dari kurikulum HSK 5.'},
+ {id:'tocfl',name:'TOCFL',description:'Diskusikan level awal dan target TOCFL untuk menyusun pilihan kelas yang sesuai.'}
 ];
-const bundles=[{sessions:4,discount:0,name:'Coba & mulai',badge:'LANGKAH PERTAMA',description:'Beri ruang untuk awal yang baru.'},{sessions:12,discount:.1,name:'Bangun kebiasaan',badge:'USULAN HEMAT 10%',description:'Lebih rutin, selangkah lebih maju.'},{sessions:24,discount:.2,name:'Jaga momentum',badge:'USULAN HEMAT 20%',description:'Jadikan belajar bagian dari harimu.'}];
+const schedules = [{id:'twice',label:'2× seminggu',duration:1.5,weekly:2},{id:'three',label:'3× seminggu',duration:1,weekly:3}];
+let selectedSchedule=schedules[0];
 const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
-const wa=text=>`https://wa.me/${SITE.phone}?text=${encodeURIComponent(text)}`;
+const wa=text=>'https://wa.me/'+SITE.phone+'?text='+encodeURIComponent(text);
 function wireWhatsApp(root=document){root.querySelectorAll('[data-wa]').forEach(a=>{a.href=wa(a.dataset.wa);a.target='_blank';a.rel='noopener noreferrer';});}
 let selectedCourse=courses[0];
 const tabs=document.querySelector('#course-tabs');
 courses.forEach(course=>{const b=document.createElement('button');b.type='button';b.textContent=course.name;b.dataset.course=course.id;b.addEventListener('click',()=>renderCourse(course));tabs.append(b);});
-function renderCourse(course){selectedCourse=course;tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.course===course.id)));document.querySelector('#level-label').textContent=course.label;document.querySelector('#course-title').textContent=course.title;document.querySelector('#course-description').textContent=course.description;document.querySelector('#packages').innerHTML=bundles.map((b,i)=>{const normal=b.sessions*course.rate;const total=Math.round(normal*(1-b.discount));const message=`Halo Kak! Aku tertarik kursus ${course.name}, bundle ${b.sessions} sesi (${b.name}) di Success with Mandarin. Di preview, simulasi harganya ${money(total)}${b.discount?` dengan usulan diskon ${b.discount*100}%`:''}. Boleh konfirmasi harga final, durasi per sesi, format kelas, dan jadwal yang tersedia?`;return `<article class="package ${i===1?'featured':''}"><span class="badge">${b.badge}</span><h3>${b.sessions}× sesi</h3><p>${b.name} · ${course.name}</p><span class="price-old">${b.discount?`<s>${money(normal)}</s> · harga simulasi awal`:'Harga simulasi'}</span><div class="price">${money(total)}</div><span class="price-note">${money(total/b.sessions)} / sesi · simulasi</span><ul><li>${b.sessions} sesi belajar ${course.name}</li><li>Materi mengikuti kurikulum</li><li>Free e-book & sertifikat</li></ul><a class="button" href="${wa(message)}" target="_blank" rel="noopener noreferrer" aria-label="Pesan ${course.name} ${b.sessions} sesi melalui WhatsApp">Order now · Konsultasi <span>↗</span></a></article>`;}).join('');}
+const scheduleTabs=document.querySelector('#schedule-tabs');
+schedules.forEach(schedule=>{const b=document.createElement('button');b.type='button';b.dataset.schedule=schedule.id;b.textContent=schedule.label+' · '+String(schedule.duration).replace('.',',')+' jam/sesi';b.addEventListener('click',()=>{selectedSchedule=schedule;renderCourse(selectedCourse);});scheduleTabs.append(b);});
+function renderCourse(course){
+ selectedCourse=course;
+ tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.course===course.id)));
+ scheduleTabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.schedule===selectedSchedule.id)));
+ document.querySelector('#level-label').textContent=course.hours?'PAKET '+course.hours+' JAM BELAJAR':'KONSULTASI PROGRAM';
+ document.querySelector('#course-title').textContent=course.name+' · Belajar sesuai ritmemu.';
+ document.querySelector('#course-description').textContent=course.description;
+ const duration=String(selectedSchedule.duration).replace('.',',');
+ const schedule=selectedSchedule.label+', '+duration+' jam per sesi';
+ const options=course.hours?[{name:'Private 1-on-1',people:'1 murid',price:course.privatePrice},{name:'Private Group',people:'2–4 orang',price:course.groupPrice}]:[{name:'Program TOCFL',people:'Konsultasikan format kelas'}];
+ document.querySelector('#packages').innerHTML=options.map((option,i)=>{
+  const sessions=course.hours?course.hours/selectedSchedule.duration:null;
+  const weeks=course.hours?course.hours/3:null;
+  const message='Halo Kak! Aku tertarik paket '+course.name+' — '+option.name+' ('+option.people+') di Success with Mandarin. '+(course.hours?'Harga '+money(option.price)+' per orang untuk '+course.hours+' jam belajar. Pilihan jadwal: '+schedule+' ('+sessions+' sesi total, perkiraan '+weeks+' minggu). ':'Aku ingin belajar '+schedule+'. Boleh info harga per orang dan total jam paket TOCFL? ')+'Boleh konsultasi jadwal yang tersedia dan cara pendaftarannya?';
+  return '<article class="package '+(i===1?'featured':'')+'"><span class="badge">'+option.people+'</span><h3>'+option.name+'</h3><p>'+course.name+(course.hours?' · '+course.hours+' jam belajar':'')+'</p><div class="price">'+(course.hours?money(option.price):'Tanya harga')+'</div><span class="price-note">'+(course.hours?'per orang / paket '+course.name:'Harga & durasi dikonfirmasi via WhatsApp')+'</span><ul>'+(course.hours?'<li>'+sessions+' sesi × '+duration+' jam</li><li>'+selectedSchedule.label+' · ±'+weeks+' minggu*</li>':'<li>Preferensi: '+schedule+'</li>')+'<li>Materi mengikuti kurikulum</li><li>Free e-book & sertifikat</li></ul><a class="button" href="'+wa(message)+'" target="_blank" rel="noopener noreferrer" aria-label="Pesan '+course.name+' '+option.name+' melalui WhatsApp">Order now · Konsultasi <span>↗</span></a></article>';
+ }).join('');
+ document.querySelector('#package-duration-note').textContent=course.hours?'*Perkiraan durasi berdasarkan 3 jam belajar per minggu, belum termasuk libur atau perubahan jadwal. Harga berlaku per orang, termasuk untuk Private Group.':'Harga, jumlah sesi, total jam, dan format kelas TOCFL akan diinformasikan saat konsultasi.';
+}
 renderCourse(selectedCourse);wireWhatsApp();document.querySelector('#year').textContent=new Date().getFullYear();
 // Casual progressive vocabulary practice; not an official HSK placement test.
 const beginnerQuestions=[
